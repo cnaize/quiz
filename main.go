@@ -33,7 +33,7 @@ func main() {
 
 	var i int
 	var found bool
-	var res words.Result
+	var res string
 	for {
 		if !found {
 			// add payload depending on "numCPU" and running workers
@@ -48,20 +48,14 @@ func main() {
 			break
 		}
 
-		jres, ok := job.Result.(words.Result)
+		jres, ok := job.Result.(string)
 		if !ok {
 			panic("job: invalid result type")
 		}
 
-		if len(jres) == 0 {
-			continue
-		}
-
-		if len(res) == 0 || len(jres[0]) > len(res[0]) {
+		if len(jres) > len(res) {
 			res = jres
 			found = true
-		} else if len(jres[0]) == len(res[0]) {
-			res = append(res, jres...)
 		}
 
 		if mypool.Status().Running == 0 {
@@ -69,12 +63,7 @@ func main() {
 		}
 	}
 
-	lenght := 0
-	if len(res) > 0 {
-		lenght = len(res[0])
-	}
-
-	fmt.Printf("Results: %v, len - %d\n", res, lenght)
+	fmt.Printf("Result: %s, len - %d\n", res, len(res))
 }
 
 func loadWords(path string) (words.WordList, error) {
