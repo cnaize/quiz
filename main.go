@@ -17,14 +17,17 @@ func main() {
 	flag.StringVar(&inPath, "in", "word.list", "path to file with words")
 	flag.Parse()
 
+	// load words
 	wordList, err := loadWords(inPath)
 	if err != nil {
 		panic(fmt.Sprintf("can't load input file: %+v\n", err))
 	}
 
+	// create pool
 	mypool := pool.New(runtime.NumCPU())
 	mypool.Run()
 
+	// add payload
 	for _, w := range wordList.AllWords() {
 		mypool.Add(words.HandleWord, w, wordList)
 	}

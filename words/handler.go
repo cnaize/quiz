@@ -26,10 +26,13 @@ func processWord(subWord string, wordList WordList, word string) Result {
 		return res
 	}
 
-	var found bool
 	subList := wordList.SubList(len(subWord))
+	var found bool
+	// go through "subWord"'s characters
 	for i, c := range subWord {
+		// go through "subList" from min words lenght to max
 		for j := 0; j < len(subList); j++ {
+			// get all words of "subList" with lenght "j+1" and started with "c"
 			wordSlice := subList.Words(j, byte(c))
 			for k := 0; k < len(wordSlice); k++ {
 				tmpWord := wordSlice[k]
@@ -39,6 +42,7 @@ func processWord(subWord string, wordList WordList, word string) Result {
 
 				if strings.HasPrefix(subWord, tmpWord) {
 					var subRes Result
+					// if "subWord" can be processed recursively call the func
 					if len(subWord) >= i+len(tmpWord) {
 						subRes = processWord(subWord[i+len(wordSlice[k]):], wordList, word)
 					}
