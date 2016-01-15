@@ -1,3 +1,18 @@
+# Nikita Loskutov (cnaize@gmail.com)
+
+Fetch dependences:
+```bash
+go get -u github.com/stefantalpalaru/pool
+```
+Run:
+```bash
+go run main.go -in=word.list
+```
+
+### Tested with go1.5.1
+
+## I can fix my solution if needed.
+
 # quiz
 
 
