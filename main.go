@@ -35,11 +35,14 @@ func main() {
 	var found bool
 	var res string
 	for {
+		stats := mypool.Status()
 		if !found {
 			// add payload depending on "numCPU" and running workers
-			for j := 0; j < numCPU-mypool.Status().Running; j++ {
-				mypool.Add(words.HandleWord, allWords[i], wordList)
-				i++
+			for j := 0; j < numCPU-stats.Running; j++ {
+				if i < len(allWords) {
+					mypool.Add(words.HandleWord, allWords[i], wordList)
+					i++
+				}
 			}
 		}
 
@@ -58,7 +61,7 @@ func main() {
 			found = true
 		}
 
-		if mypool.Status().Running == 0 {
+		if found && stats.Completed == stats.Submitted {
 			break
 		}
 	}
