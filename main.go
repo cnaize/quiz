@@ -23,17 +23,31 @@ func main() {
 		panic(fmt.Sprintf("can't load input file: %+v\n", err))
 	}
 
+	numCPU := runtime.NumCPU()
+
 	// create pool
-	mypool := pool.New(runtime.NumCPU())
+	mypool := pool.New(numCPU)
 	mypool.Run()
 
+	allWords := wordList.AllWords()
+
 	// add payload
-	for _, w := range wordList.AllWords() {
+	for _, w := range allWords {
 		mypool.Add(words.HandleWord, w, wordList)
 	}
 
+	var i int
+	var found bool
 	var res words.Result
 	for {
+		if !found {
+			// add payload depending on "numCPU" and running workers
+			for j := 0; j < numCPU-mypool.Status().Running; j++ {
+				mypool.Add(words.HandleWord, allWords[i], wordList)
+				i++
+			}
+		}
+
 		job := mypool.WaitForJob()
 		if job == nil {
 			break
@@ -48,16 +62,24 @@ func main() {
 			continue
 		}
 
-		if len(res) == 0 {
+		if len(res) == 0 || len(jres[0]) > len(res[0]) {
 			res = jres
+			found = true
 		} else if len(jres[0]) == len(res[0]) {
 			res = append(res, jres...)
-		} else if len(jres[0]) > len(res[0]) {
-			res = jres
+		}
+
+		if mypool.Status().Running == 0 {
+			break
 		}
 	}
 
-	fmt.Printf("Result: %v\n", res)
+	lenght := 0
+	if len(res) > 0 {
+		lenght = len(res[0])
+	}
+
+	fmt.Printf("Results: %v, len - %d\n", res, lenght)
 }
 
 func loadWords(path string) (words.WordList, error) {

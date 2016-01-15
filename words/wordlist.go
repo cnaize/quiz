@@ -26,11 +26,11 @@ func (wl *WordList) AddWord(word string) {
 	}
 }
 
-// get all words
+// get all words (longest first)
 func (wl WordList) AllWords() []string {
 	var res []string
-	for _, m := range wl {
-		for _, s := range m {
+	for i := len(wl) - 1; i >= 0; i-- {
+		for _, s := range wl[i] {
 			res = append(res, s...)
 		}
 	}
