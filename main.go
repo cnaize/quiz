@@ -72,5 +72,9 @@ func loadWords(path string) (words.WordList, error) {
 		wordList.AddWord(scanner.Text())
 	}
 
+	if err := scanner.Err(); err != nil {
+		return wordList, err
+	}
+
 	return wordList, nil
 }
