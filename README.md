@@ -1,12 +1,20 @@
 # Nikita Loskutov (cnaize@gmail.com)
 
-Fetch dependences:
+Download the project:
+```bash
+go get -u github.com/cnaize/quiz
+```
+Download dependences:
 ```bash
 go get -u github.com/stefantalpalaru/pool
 ```
+Build:
+```bash
+go build main.go
+```
 Run:
 ```bash
-go run main.go -in=word.list
+./main -in=word.list
 ```
 
 ### Tested with go1.5.1
