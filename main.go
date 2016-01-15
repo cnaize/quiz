@@ -31,11 +31,6 @@ func main() {
 
 	allWords := wordList.AllWords()
 
-	// add payload
-	for _, w := range allWords {
-		mypool.Add(words.HandleWord, w, wordList)
-	}
-
 	var i int
 	var found bool
 	var res words.Result
